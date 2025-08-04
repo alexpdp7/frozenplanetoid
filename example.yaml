@@ -1,0 +1,205 @@
+- categories:
+  - seres
+  - tecnología/prolog
+  rss: https://blog.adrianistan.eu/rss.xml
+- categories:
+  - seres
+  rss: https://adrianperales.com/feed/
+- categories:
+  - beings
+  - tech
+  rss: https://apenwarr.ca/log/rss.php
+  title: apenwarr
+- categories:
+  - tech
+  rss: https://blondihacks.com/feed/
+  title: Blondihacks
+- categories:
+  - beings
+  - tech
+  rss: https://www.hezmatt.org/~mpalmer/blog/rss.xml
+- categories:
+  - beings
+  rss: https://shitpost.plover.com/index.atom
+- categories:
+  - beings
+  rss: https://www.dangermouse.net/wordpresshome/feed/
+- categories:
+  - beings
+  - tech
+  rss: https://drewdevault.com/blog/index.xml
+- categories:
+  - seres
+  rss: https://alex.corcoles.net/feed/
+- categories:
+  - beings
+  - tech
+  rss: https://fabiensanglard.net/rss.xml
+- categories:
+  - beings
+  - tech
+  rss: https://danluu.com/atom.xml
+- categories:
+  - beings
+  - tech
+  rss: https://infrequently.org/feed/
+- categories:
+  - beings
+  - tech
+  rss: https://cdn.jwz.org/blog/feed/
+- categories:
+  - seres
+  rss: http://www.lapaginadefinitiva.com/feed/
+- categories:
+  - beings
+  - tech
+  rss: https://www.teamten.com/lawrence/writings/rss.xml
+- categories:
+  - beings
+  - tech
+  rss: https://lukeplant.me.uk/blog/atom/index.xml
+- categories:
+  - beings
+  - tech
+  rss: https://luminousmen.com/feeds/
+  title: Luminousmen Blog
+- categories:
+  - beings
+  - tech
+  rss: https://eyskens.me/index.xml
+  title: Maartje Eyskens
+- categories:
+  - seres
+  rss: https://obm.corcoles.net/feed/
+- categories:
+  - seres
+  - accesibilidad
+  rss: https://jmdaweb.github.io/index.xml
+- categories:
+  - beings
+  - tech
+  rss: http://uridiumauthor.blogspot.com/feeds/posts/default
+- categories:
+  - beings
+  rss: https://blog.plover.com/index.rss
+- categories:
+  - tech
+  rss: http://feeds.arstechnica.com/arstechnica/index
+- categories:
+  - beings
+  - tech
+  rss: https://charity.wtf/feed/
+- categories:
+  - tech
+  rss: https://dancharblog.wordpress.com/feed/
+- categories:
+  - tech
+  rss: https://feeds.feedburner.com/blogspot/RLXA
+- categories:
+  - tech
+  - beings
+  rss: https://www.hillelwayne.com/index.xml
+  title: Hillel Wayne
+- categories:
+  - tech
+  rss: https://blog.archive.org/feed/
+- categories:
+  - tech
+  - beings
+  rss: https://www.joelonsoftware.com/feed/
+- categories:
+  - tech
+  rss: https://blog.kagi.com/rss.xml
+- categories:
+  - tech
+  rss: https://feeds.feedburner.com/Liliputing
+- categories:
+  - tech
+  rss: https://medium.com/feed/netflix-techblog
+- categories:
+  - gaming
+  rss: https://www.polygon.com/feed/
+- categories:
+  - tech
+  - beings
+  rss: https://www.jeffgeerling.com/blog.xml
+- categories:
+  - beings
+  - tech
+  rss: https://www.schneier.com/feed/
+- categories:
+  - gaming
+  rss: https://www.rockpapershotgun.com/feed
+- categories:
+  - tech
+  rss: http://rss.slashdot.org/Slashdot/slashdotMain
+- categories:
+  - tech
+  rss: https://www.smallnetbuilder.com/feed/
+- categories:
+  - tech
+  rss: https://www.theverge.com/rss/index.xml
+- categories:
+  - tech
+  - beings
+  rss: https://grep.be/blog/index.atom
+- categories:
+  - tech
+  rss: https://feeds.feedburner.com/TheWirecutter
+- categories:
+  - tech
+  - beings
+  rss: https://xeiaso.net/blog.rss
+- categories:
+  - funny
+  rss: https://pbfcomics.com/comics/feed/
+- categories:
+  - funny
+  rss: http://feeds.penny-arcade.com/pa-mainsite/
+- categories:
+  - funny
+  rss: https://xkcd.com/rss.xml
+- categories:
+  - movies
+  - beings
+  rss: http://thefilmexperience.net/blog/rss.xml
+- categories:
+  - cine
+  rss: https://www.elcinedeloqueyotediga.net/feed
+- categories:
+  - news
+  rss: https://theconversation.com/articles.atom?language=en
+- categories:
+  - noticias
+  rss: http://feeds.feedburner.com/Malaprensa
+- categories:
+  - noticias
+  rss: https://maldita.es/feed
+- categories:
+  - news
+  rss: https://www.snopes.com/feed/
+- categories:
+  - noticias-google/destacadas
+  rss: https://news.google.com/rss?hl=es&gl=ES&ceid=ES%3Aes&oc=11
+- categories:
+  - news
+  rss: https://api.quantamagazine.org/feed/
+- categories:
+  - noticias
+  rss: https://theconversation.com/articles.atom?language=es
+- categories:
+  - news
+  rss: https://www.theguardian.com/news/series/the-long-read/rss
+- categories:
+  - news-google/top
+  rss: https://news.google.com/rss?hl=en-US&gl=US&ceid=US%3Aen&oc=11
+- categories:
+  - news
+  rss: https://www.vox.com/rss/front-page/index.xml
+- categories:
+  - ofertas
+  rss: https://www.ofertitas.es/feed/
+- categories:
+  - tech
+  rss: https://theblog.okcupid.com/feed?gi=595f0a960fdc
+  title: OkTrends
