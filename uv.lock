@@ -56,6 +56,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "feedparser" },
+    { name = "htmlgenerator" },
     { name = "pyyaml" },
 ]
 
@@ -68,6 +69,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "feedparser", specifier = ">=6.0.11" },
+    { name = "htmlgenerator", specifier = ">=1.2.32" },
     { name = "pyyaml", specifier = ">=6.0.2" },
 ]
 
@@ -75,6 +77,15 @@ requires-dist = [
 dev = [
     { name = "ipython", specifier = ">=9.4.0" },
     { name = "ruff", specifier = ">=0.12.7" },
+]
+
+[[package]]
+name = "htmlgenerator"
+version = "1.2.32"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/66/8c512a30eb3201825f4b492148a94d881f78771fffdb48627e4f935007f7/htmlgenerator-1.2.32.tar.gz", hash = "sha256:fc9b1702c98080bfebf0b4e26f711eb3534c81322fb5f4551ed8869b143c2793", size = 24231, upload-time = "2024-12-24T04:36:06.675Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/68/3dcc3818413642fb1d622838a3d33fdd12b4691c835ab3b7706714edb63d/htmlgenerator-1.2.32-py3-none-any.whl", hash = "sha256:e5598d6c2704ad13c78e23594d629a362d7a4b4e0e34c976da650edbb954c37f", size = 22869, upload-time = "2024-12-24T04:36:04.348Z" },
 ]
 
 [[package]]
