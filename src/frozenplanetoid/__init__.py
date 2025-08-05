@@ -7,6 +7,10 @@ import yaml
 
 import feedparser
 import htmlgenerator
+import html_sanitizer
+
+
+SANITIZER = html_sanitizer.Sanitizer()
 
 
 class Feed:
@@ -23,6 +27,32 @@ class Feed:
 
     def __repr__(self):
         return f"Feed({self.d['rss']})"
+
+
+class Entry:
+    def __init__(self, e):
+        self.e = e
+
+    @property
+    def title(self):
+        return self.e.title
+
+    @property
+    def link(self):
+        return self.e.link
+
+    def as_html(self):
+        if not hasattr(self.e, "content"):
+            return None
+        html = [
+            c
+            for c in self.e.content
+            if c.type in ("text/html", "application/xhtml+xml")
+        ]
+        if len(html) == 1:
+            html = html[0]
+            return SANITIZER.sanitize(html.value)
+        return None
 
 
 @dataclasses.dataclass
@@ -66,6 +96,8 @@ class Category:
             entries += f.parsed.entries
         entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
 
+        entries = map(Entry, entries)
+
         (output / f"{self.slug}.html").write_text(
             htmlgenerator.render(
                 htmlgenerator.HTML(
@@ -76,7 +108,8 @@ class Category:
                                     htmlgenerator.A(
                                         f"{e.title}",
                                         href=e.link,
-                                    )
+                                    ),
+                                    htmlgenerator.mark_safe(e.as_html()),
                                 )
                                 for e in entries
                             ]
