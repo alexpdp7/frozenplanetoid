@@ -67,6 +67,7 @@ class Entry:
                     href=self.link,
                 ),
                 f" ({self.feed.parsed.feed.title})",
+                _class="entry_header",
             ),
             htmlgenerator.mark_safe(self.html_content() or ""),
         )
@@ -200,6 +201,12 @@ def html(*body):
                 img {
                   max-width: 100%;
                   height: auto;
+                }
+                .entry_header {
+                  padding-top: 0.5em;
+                  border-top: 0.5em solid black;
+                  padding-bottom: 0.5em;
+                  border-bottom: 0.5em solid black;
                 }
                 """),
             ),
