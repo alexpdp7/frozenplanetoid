@@ -49,10 +49,18 @@ class Entry:
             for c in self.e.content
             if c.type in ("text/html", "application/xhtml+xml")
         ]
-        if len(html) == 1:
-            html = html[0]
-            return SANITIZER.sanitize(html.value)
-        return None
+        if len(html) != 1:
+            return None
+        html = html[0]
+        return htmlgenerator.BaseElement(
+            htmlgenerator.H2(
+                htmlgenerator.A(
+                    self.title,
+                    href=self.link,
+                ),
+            ),
+            htmlgenerator.mark_safe(html.value),
+        )
 
 
 @dataclasses.dataclass
@@ -100,22 +108,7 @@ class Category:
 
         (output / f"{self.slug}.html").write_text(
             htmlgenerator.render(
-                htmlgenerator.HTML(
-                    htmlgenerator.BODY(
-                        htmlgenerator.UL(
-                            *[
-                                htmlgenerator.LI(
-                                    htmlgenerator.A(
-                                        f"{e.title}",
-                                        href=e.link,
-                                    ),
-                                    htmlgenerator.mark_safe(e.as_html()),
-                                )
-                                for e in entries
-                            ]
-                        )
-                    )
-                ),
+                htmlgenerator.HTML(htmlgenerator.BODY(*(e.as_html() for e in entries))),
                 {},
             )
         )
