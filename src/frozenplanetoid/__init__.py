@@ -106,12 +106,8 @@ class Category:
 
         entries = map(Entry, entries)
 
-        (output / f"{self.slug}.html").write_text(
-            htmlgenerator.render(
-                htmlgenerator.HTML(htmlgenerator.BODY(*(e.as_html() for e in entries))),
-                {},
-            )
-        )
+        (output / f"{self.slug}.html").write_text(html(*(e.as_html() for e in entries)))
+
         for category in self.children_categories.values():
             category.render(output)
 
@@ -157,13 +153,36 @@ def main():
     output.mkdir()
 
     (output / "index.html").write_text(
-        htmlgenerator.render(
-            htmlgenerator.HTML(
-                htmlgenerator.BODY(htmlgenerator.UL(root_category.as_list_item()))
-            ),
-            {},
-        )
+        html(htmlgenerator.UL(root_category.as_list_item()))
     )
 
     for _, category in root_category.children_categories.items():
         category.render(output)
+
+
+def html(*body):
+    return htmlgenerator.render(
+        htmlgenerator.HTML(
+            htmlgenerator.HEAD(
+                htmlgenerator.STYLE("""
+                :root {
+                  color-scheme: light dark;
+                }
+                body {
+                  max-width: 40em;
+                  margin-left: auto;
+                  margin-right: auto;
+                  padding-left: 2em;
+                  padding-right: 2em;
+                }
+                p, blockquote {
+                  /* from Mozilla reader mode */
+                  line-height: 1.6em;
+                  font-size: 20px;
+                }
+                """),
+            ),
+            htmlgenerator.BODY(*body),
+        ),
+        {},
+    )
