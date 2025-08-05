@@ -180,6 +180,10 @@ def html(*body):
                   line-height: 1.6em;
                   font-size: 20px;
                 }
+                img {
+                  max-width: 100%;
+                  height: auto;
+                }
                 """),
             ),
             htmlgenerator.BODY(*body),
