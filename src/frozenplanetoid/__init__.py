@@ -56,7 +56,7 @@ class Entry:
         ]
         if len(html) != 1:
             return None
-        return html[0]
+        return html[0].value
 
     def as_html(self):
         return htmlgenerator.BaseElement(
