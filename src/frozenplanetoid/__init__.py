@@ -31,8 +31,9 @@ class Feed:
 
 
 class Entry:
-    def __init__(self, e):
+    def __init__(self, e, feed):
         self.e = e
+        self.feed = feed
 
     @property
     def title(self):
@@ -65,6 +66,7 @@ class Entry:
                     self.title,
                     href=self.link,
                 ),
+                f" ({self.feed.parsed.feed.title})",
             ),
             htmlgenerator.mark_safe(self.html_content() or ""),
         )
@@ -108,14 +110,13 @@ class Category:
             except:
                 print(f)
                 continue
-            entries += f.parsed.entries
+            entries += [Entry(e, f) for e in f.parsed.entries]
         entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
 
         content = []
         previous_date = None
 
         for entry in entries:
-            entry = Entry(entry)
             entry_date = datetime.date(*entry.published_parsed[0:3])
             if entry_date != previous_date:
                 content.append(htmlgenerator.H1(str(entry_date)))
