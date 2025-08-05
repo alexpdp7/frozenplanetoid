@@ -1,6 +1,7 @@
 import argparse
 import concurrent.futures
 import dataclasses
+import datetime
 import pathlib
 import shutil
 import yaml
@@ -40,6 +41,10 @@ class Entry:
     @property
     def link(self):
         return self.e.link
+
+    @property
+    def published_parsed(self):
+        return self.e.published_parsed
 
     def html_content(self):
         if not hasattr(self.e, "content"):
@@ -106,9 +111,18 @@ class Category:
             entries += f.parsed.entries
         entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
 
-        entries = map(Entry, entries)
+        content = []
+        previous_date = None
 
-        (output / f"{self.slug}.html").write_text(html(*(e.as_html() for e in entries)))
+        for entry in entries:
+            entry = Entry(entry)
+            entry_date = datetime.date(*entry.published_parsed[0:3])
+            if entry_date != previous_date:
+                content.append(htmlgenerator.H1(str(entry_date)))
+            content.append(entry.as_html())
+            previous_date = entry_date
+
+        (output / f"{self.slug}.html").write_text(html(*(content)))
 
         for category in self.children_categories.values():
             category.render(output)
