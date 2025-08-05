@@ -41,7 +41,7 @@ class Entry:
     def link(self):
         return self.e.link
 
-    def as_html(self):
+    def html_content(self):
         if not hasattr(self.e, "content"):
             return None
         html = [
@@ -51,7 +51,9 @@ class Entry:
         ]
         if len(html) != 1:
             return None
-        html = html[0]
+        return html[0]
+    
+    def as_html(self):
         return htmlgenerator.BaseElement(
             htmlgenerator.H2(
                 htmlgenerator.A(
@@ -59,7 +61,7 @@ class Entry:
                     href=self.link,
                 ),
             ),
-            htmlgenerator.mark_safe(html.value),
+            htmlgenerator.mark_safe(self.html_content() or ""),
         )
 
 
