@@ -151,8 +151,6 @@ class Category:
             entry_date = datetime.date(*entry.published_parsed[0:3])
             if entry_date != previous_date:
                 content.append(htmlgenerator.H1(str(entry_date)))
-            else:
-                content.append(htmlgenerator.HR())
             content.append(entry.as_html())
             previous_date = entry_date
 
@@ -243,6 +241,10 @@ def html(*body):
                 }
                 details h2 {
                   display: inline;
+                }
+                article {
+                  border: 1px solid black;
+                  padding: 1em;
                 }
                 """),
             ),
