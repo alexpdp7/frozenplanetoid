@@ -92,7 +92,6 @@ class Entry:
                     href=self.link,
                 ),
                 f" ({self.feed.parsed.feed.title})",
-                _class="entry_header",
             ),
             htmlgenerator.mark_safe(self.html_content(3) or ""),
         )
@@ -146,6 +145,8 @@ class Category:
             entry_date = datetime.date(*entry.published_parsed[0:3])
             if entry_date != previous_date:
                 content.append(htmlgenerator.H1(str(entry_date)))
+            else:
+                content.append(htmlgenerator.HR())
             content.append(entry.as_html())
             previous_date = entry_date
 
@@ -226,12 +227,6 @@ def html(*body):
                 img {
                   max-width: 100%;
                   height: auto;
-                }
-                .entry_header {
-                  padding-top: 0.5em;
-                  border-top: 0.5em solid black;
-                  padding-bottom: 0.5em;
-                  border-bottom: 0.5em solid black;
                 }
                 """),
             ),
