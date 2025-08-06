@@ -87,14 +87,18 @@ class Entry:
     def as_html(self):
         return htmlgenerator.BaseElement(
             htmlgenerator.ARTICLE(
-                htmlgenerator.H2(
-                    htmlgenerator.A(
-                        self.title,
-                        href=self.link,
-                    ),
-                    f" ({self.feed.parsed.feed.title})",
-                ),
-                htmlgenerator.mark_safe(self.html_content(3) or ""),
+                htmlgenerator.DETAILS(
+                    htmlgenerator.SUMMARY(
+                        htmlgenerator.H2(
+                            htmlgenerator.A(
+                                self.title,
+                                href=self.link,
+                            ),
+                            f" ({self.feed.parsed.feed.title})",
+                        ),
+                        htmlgenerator.mark_safe(self.html_content(3) or ""),
+                    )
+                )
             )
         )
 
@@ -230,9 +234,15 @@ def html(*body):
                   max-width: 100%;
                   height: auto;
                 }
-                article {
-                  max-height: 90vh;
-                  overflow: auto;
+                details {
+                  max-height: 30vh;
+                  overflow-y: clip
+                }
+                details:open {
+                  max-height: none;
+                }
+                details h2 {
+                  display: inline;
                 }
                 """),
             ),
