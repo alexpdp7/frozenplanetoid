@@ -57,7 +57,7 @@ class Entry:
         ]
         if len(html) != 1:
             return None
-        return html[0].value
+        return SANITIZER.sanitize(html[0].value)
 
     def as_html(self):
         return htmlgenerator.BaseElement(
