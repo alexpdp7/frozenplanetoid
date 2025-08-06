@@ -242,9 +242,17 @@ def html(*body):
                 details h2 {
                   display: inline;
                 }
-                article {
-                  border: 1px solid black;
-                  padding: 1em;
+                @media (prefers-color-scheme: light) {
+                  article {
+                    border: 1px solid black;
+                    padding: 1em;
+                  }
+                }
+                @media (prefers-color-scheme: dark) {
+                  article {
+                    border: 1px solid white;
+                    padding: 1em;
+                  }
                 }
                 """),
             ),
