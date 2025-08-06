@@ -9,6 +9,7 @@ import yaml
 import feedparser
 import htmlgenerator
 import html_sanitizer
+import lxml.html
 
 
 SANITIZER = html_sanitizer.Sanitizer()
@@ -47,7 +48,7 @@ class Entry:
     def published_parsed(self):
         return self.e.published_parsed
 
-    def html_content(self):
+    def html_content(self, base_header_level):
         if not hasattr(self.e, "content"):
             return None
         html = [
@@ -57,7 +58,31 @@ class Entry:
         ]
         if len(html) != 1:
             return None
-        return SANITIZER.sanitize(html[0].value)
+        html = SANITIZER.sanitize(html[0].value)
+        html = lxml.html.fromstring(html)
+
+        min_header_level = None
+        max_header_level = None
+
+        HEADERS = ("h1", "h2", "h3", "h4", "h5", "h6")
+        for fragment in html.iter():
+            try:
+                header_level = HEADERS.index(fragment.tag) + 1
+            except ValueError:
+                continue
+            if not min_header_level or header_level < min_header_level:
+                min_header_level = header_level
+            if not max_header_level or header_level > max_header_level:
+                max_header_level = header_level
+
+        for fragment in html.iter():
+            try:
+                header_level = HEADERS.index(fragment.tag) + 1
+            except ValueError:
+                continue
+            new_level = min(header_level - min_header_level + base_header_level, 6)
+            fragment.tag = f"h{new_level}"
+        return lxml.html.tostring(html)[len("<div>") : -len("</div>")].decode("utf8")
 
     def as_html(self):
         return htmlgenerator.BaseElement(
@@ -69,7 +94,7 @@ class Entry:
                 f" ({self.feed.parsed.feed.title})",
                 _class="entry_header",
             ),
-            htmlgenerator.mark_safe(self.html_content() or ""),
+            htmlgenerator.mark_safe(self.html_content(3) or ""),
         )
 
 
