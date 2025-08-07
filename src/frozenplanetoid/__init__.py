@@ -16,19 +16,15 @@ SANITIZER = html_sanitizer.Sanitizer()
 
 
 class Feed:
-    def __init__(self, d):
-        self.d = d
-
-    @property
-    def rss(self):
-        return self.d["rss"]
+    def __init__(self, url):
+        self.url = url
 
     def load(self):
         print(f"loading {self}")
-        self.parsed = feedparser.parse(self.rss)
+        self.parsed = feedparser.parse(self.url)
 
     def __repr__(self):
-        return f"Feed({self.d['rss']})"
+        return f"Feed({self.url})"
 
 
 class Entry:
@@ -103,70 +99,35 @@ class Entry:
         )
 
 
-@dataclasses.dataclass
-class Category:
-    children_categories: dict[str, "Categories"]
-    feeds: list[Feed]
-    name: str
-    parent: "Category"
+def render(feeds, output):
+    entries = []
+    for f in feeds:
+        try:
+            [e.published_parsed for e in f.parsed.entries]
+        except:
+            print(f)
+            continue
+        entries += [Entry(e, f) for e in f.parsed.entries]
+    entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
 
-    def as_list_item(self):
-        if self.parent is None:
-            body = "*"
-        else:
-            body = htmlgenerator.A(
-                f"{self.name} ({len(self.feeds)})",
-                href=f"{self.slug}.html",
-            )
-        return htmlgenerator.LI(
-            body,
-            htmlgenerator.UL(
-                *[c.as_list_item() for _, c in sorted(self.children_categories.items())]
-            ),
-        )
+    content = []
+    previous_date = None
 
-    @property
-    def slug(self):
-        if not self.parent:
-            return ""
-        if not self.parent.parent:
-            return f"{self.parent.slug}--{self.name}"[2:]
-        return f"{self.parent.slug}--{self.name}"
+    for entry in entries:
+        entry_date = datetime.date(*entry.published_parsed[0:3])
+        if entry_date != previous_date:
+            content.append(htmlgenerator.H1(str(entry_date)))
+        content.append(entry.as_html())
+        previous_date = entry_date
 
-    def render(self, output):
-        entries = []
-        for f in self.feeds:
-            try:
-                [e.published_parsed for e in f.parsed.entries]
-            except:
-                print(f)
-                continue
-            entries += [Entry(e, f) for e in f.parsed.entries]
-        entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
-
-        content = []
-        previous_date = None
-
-        for entry in entries:
-            entry_date = datetime.date(*entry.published_parsed[0:3])
-            if entry_date != previous_date:
-                content.append(htmlgenerator.H1(str(entry_date)))
-            content.append(entry.as_html())
-            previous_date = entry_date
-
-        (output / f"{self.slug}.html").write_text(html(*(content)))
-
-        for category in self.children_categories.values():
-            category.render(output)
-
+    output.write_text(html(*(content)))
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("config", type=pathlib.Path)
     parser.add_argument("output", type=pathlib.Path)
+    parser.add_argument("feed", nargs="*")
+
     args = parser.parse_args()
-    config = yaml.load(args.config.read_text(), yaml.SafeLoader)
-    feeds = config
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
 
@@ -175,37 +136,9 @@ def main():
             feed.load()
             return feed
 
-        feeds = executor.map(_load, feeds)
+        feeds = executor.map(_load, args.feed)
 
-    root_category = Category(children_categories={}, feeds=[], name="*", parent=None)
-
-    for feed in feeds:
-        for feed_category in feed.d["categories"]:
-            category_pointer = root_category
-            for feed_category_path in feed_category.split("/"):
-                if feed_category_path not in category_pointer.children_categories:
-                    category_pointer.children_categories[feed_category_path] = Category(
-                        children_categories={},
-                        feeds=[],
-                        name=feed_category_path,
-                        parent=category_pointer,
-                    )
-                category_pointer = category_pointer.children_categories[
-                    feed_category_path
-                ]
-                category_pointer.feeds.append(feed)
-
-    output = args.output
-    if output.exists():
-        shutil.rmtree(output)
-    output.mkdir()
-
-    (output / "index.html").write_text(
-        html(htmlgenerator.UL(root_category.as_list_item()))
-    )
-
-    for _, category in root_category.children_categories.items():
-        category.render(output)
+    render(feeds, args.output)
 
 
 def html(*body):

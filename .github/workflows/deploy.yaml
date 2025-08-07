@@ -19,12 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: mkdir output
-      - run: pipx run --spec . frozenplanetoid example.yaml output
+      - run: pipx install .
+      - run: ./generate
+        working-directory: example
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: output
+          path: example/target
 
   deploy:
     environment:
