@@ -54,11 +54,7 @@ class Entry:
             content = [self.e.summary_detail]
         else:
             return None
-        html = [
-            c
-            for c in content
-            if c.type in ("text/html", "application/xhtml+xml")
-        ]
+        html = [c for c in content if c.type in ("text/html", "application/xhtml+xml")]
         if len(html) != 1:
             return None
         html = SANITIZER.sanitize(html[0].value)
