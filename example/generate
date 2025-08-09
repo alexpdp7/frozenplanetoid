@@ -14,7 +14,7 @@ EOF
 
 for a in *.feeds ; do
     a=${a%.feeds}
-    frozenplanetoid target/$a.html $(cat $a.feeds)
+    frozenplanetoid --output target/$a.html $(cat $a.feeds)
     cat >>target/index.html <<EOF
     <li><a href="$a.html">$a</a></li>
 EOF

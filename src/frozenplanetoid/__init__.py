@@ -2,6 +2,7 @@ import argparse
 import concurrent.futures
 import datetime
 import pathlib
+import sys
 import textwrap
 
 import feedparser
@@ -13,12 +14,16 @@ import lxml.html
 SANITIZER = html_sanitizer.Sanitizer()
 
 
+def log(s):
+    print(s, file=sys.stderr, flush=True)
+
+
 class Feed:
     def __init__(self, url):
         self.url = url
 
     def load(self):
-        print(f"loading {self}")
+        log(f"loading {self}")
         self.parsed = feedparser.parse(self.url)
 
     def __repr__(self):
@@ -97,13 +102,13 @@ class Entry:
         )
 
 
-def render(feeds, output):
+def render(feeds):
     entries = []
     for f in feeds:
         try:
             [e.published_parsed for e in f.parsed.entries]
         except:
-            print(f)
+            log(f)
             continue
         entries += [Entry(e, f) for e in f.parsed.entries]
     entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
@@ -118,11 +123,12 @@ def render(feeds, output):
         content.append(entry.as_html())
         previous_date = entry_date
 
-    output.write_text(html(*(content)))
+    return html(*(content))
+
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("output", type=pathlib.Path)
+    parser.add_argument("--output", type=str, default="-")
     parser.add_argument("feed", nargs="*")
 
     args = parser.parse_args()
@@ -136,7 +142,12 @@ def main():
 
         feeds = executor.map(_load, args.feed)
 
-    render(feeds, args.output)
+    output = render(feeds)
+
+    if args.output == "-":
+        print(output, end="")
+    else:
+        pathlib.Path(args.output).write_text(output)
 
 
 def html(*body):
