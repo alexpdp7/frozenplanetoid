@@ -87,7 +87,7 @@ class Entry:
                 continue
             new_level = min(header_level - min_header_level + base_header_level, 6)
             fragment.tag = f"h{new_level}"
-        return lxml.html.tostring(html)[len("<div>") : -len("</div>")].decode("utf8")
+        return lxml.html.tostring(html).decode("utf8")
 
     def as_html(self):
         return htmlgenerator.BaseElement(
