@@ -1,11 +1,8 @@
 import argparse
 import concurrent.futures
-import dataclasses
 import datetime
 import pathlib
-import shutil
 import textwrap
-import yaml
 
 import feedparser
 import htmlgenerator
