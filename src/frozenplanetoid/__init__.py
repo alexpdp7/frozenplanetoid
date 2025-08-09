@@ -48,16 +48,22 @@ class Entry:
         return self.e.updated_parsed
 
     def html_content(self, base_header_level):
-        if not hasattr(self.e, "content"):
+        if hasattr(self.e, "content"):
+            content = self.e.content
+        elif hasattr(self.e, "summary_detail"):
+            content = [self.e.summary_detail]
+        else:
             return None
         html = [
             c
-            for c in self.e.content
+            for c in content
             if c.type in ("text/html", "application/xhtml+xml")
         ]
         if len(html) != 1:
             return None
         html = SANITIZER.sanitize(html[0].value)
+        if not html:
+            return None
         html = lxml.html.fromstring(html)
 
         min_header_level = None
