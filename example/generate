@@ -3,6 +3,25 @@
 rm -rf target
 mkdir target
 
+cat >target/index.html <<EOF
+<html>
+<head>
+<meta  charset="utf-8" /><meta  name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<ul>
+EOF
+
 for a in *.feeds ; do
-  frozenplanetoid target/${a%.feeds}.html $(cat $a)
+    a=${a%.feeds}
+    frozenplanetoid target/$a.html $(cat $a.feeds)
+    cat >>target/index.html <<EOF
+    <li><a href="$a.html">$a</a></li>
+EOF
 done
+
+cat >>target/index.html <<EOF
+</ul>
+</body>
+</html>
+EOF
