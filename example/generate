@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ue
+
 rm -rf target
 mkdir target
 
