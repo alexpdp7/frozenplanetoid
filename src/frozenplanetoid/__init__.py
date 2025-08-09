@@ -4,6 +4,7 @@ import dataclasses
 import datetime
 import pathlib
 import shutil
+import textwrap
 import yaml
 
 import feedparser
@@ -142,54 +143,61 @@ def main():
 
 
 def html(*body):
-    return htmlgenerator.render(
-        htmlgenerator.HTML(
-            htmlgenerator.HEAD(
-                htmlgenerator.STYLE("""
-                :root {
-                  color-scheme: light dark;
-                }
-                body {
-                  max-width: 40em;
-                  margin-left: auto;
-                  margin-right: auto;
-                  padding-left: 2em;
-                  padding-right: 2em;
-                }
-                p, blockquote {
-                  /* from Mozilla reader mode */
-                  line-height: 1.6em;
-                  font-size: 20px;
-                }
-                img {
-                  max-width: 100%;
-                  height: auto;
-                }
-                details {
-                  max-height: 30vh;
-                  overflow-y: clip
-                }
-                details:open {
-                  max-height: none;
-                }
-                details h2 {
-                  display: inline;
-                }
-                @media (prefers-color-scheme: light) {
-                  article {
-                    border: 1px solid black;
-                    padding: 1em;
-                  }
-                }
-                @media (prefers-color-scheme: dark) {
-                  article {
-                    border: 1px solid white;
-                    padding: 1em;
-                  }
-                }
-                """),
-            ),
-            htmlgenerator.BODY(*body),
+    return lxml.html.tostring(
+        lxml.html.fromstring(
+            htmlgenerator.render(
+                htmlgenerator.HTML(
+                    htmlgenerator.HEAD(
+                        htmlgenerator.STYLE(
+                            textwrap.dedent("""
+                            :root {
+                              color-scheme: light dark;
+                            }
+                            body {
+                              max-width: 40em;
+                              margin-left: auto;
+                              margin-right: auto;
+                              padding-left: 2em;
+                              padding-right: 2em;
+                            }
+                            p, blockquote {
+                              /* from Mozilla reader mode */
+                              line-height: 1.6em;
+                              font-size: 20px;
+                            }
+                            img {
+                              max-width: 100%;
+                              height: auto;
+                            }
+                            details {
+                              max-height: 30vh;
+                              overflow-y: clip
+                            }
+                            details:open {
+                              max-height: none;
+                            }
+                            details h2 {
+                              display: inline;
+                            }
+                            @media (prefers-color-scheme: light) {
+                              article {
+                                border: 1px solid black;
+                                padding: 1em;
+                              }
+                            }
+                            @media (prefers-color-scheme: dark) {
+                              article {
+                                border: 1px solid white;
+                                padding: 1em;
+                              }
+                            }
+                            """)
+                        ),
+                    ),
+                    htmlgenerator.BODY(*body),
+                ),
+                {},
+            )
         ),
-        {},
-    )
+        pretty_print=True,
+    ).decode("utf8")
