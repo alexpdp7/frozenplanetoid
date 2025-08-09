@@ -44,8 +44,8 @@ class Entry:
         return self.e.link
 
     @property
-    def published_parsed(self):
-        return self.e.published_parsed
+    def date(self):
+        return self.e.updated_parsed
 
     def html_content(self, base_header_level):
         if not hasattr(self.e, "content"):
@@ -105,19 +105,14 @@ class Entry:
 def render(feeds):
     entries = []
     for f in feeds:
-        try:
-            [e.published_parsed for e in f.parsed.entries]
-        except:
-            log(f)
-            continue
         entries += [Entry(e, f) for e in f.parsed.entries]
-    entries = reversed(sorted(entries, key=lambda e: e.published_parsed))
+    entries = reversed(sorted(entries, key=lambda e: e.date))
 
     content = []
     previous_date = None
 
     for entry in entries:
-        entry_date = datetime.date(*entry.published_parsed[0:3])
+        entry_date = datetime.date(*entry.date[0:3])
         if entry_date != previous_date:
             content.append(htmlgenerator.H1(str(entry_date)))
         content.append(entry.as_html())
