@@ -192,4 +192,5 @@ def html(*body):
             )
         ),
         pretty_print=True,
+        doctype="<!DOCTYPE html>",
     ).decode("utf8")
