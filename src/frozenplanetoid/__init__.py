@@ -93,12 +93,28 @@ class Entry:
 
 
 def render(feeds):
+    content = []
+
+    index = []
+
+    for i, f in enumerate(feeds):
+        if i != 0:
+            index.append(", ")
+
+        index.append(
+            htmlgenerator.A(
+                f.feed.title,
+                href=f.feed.link,
+            )
+        )
+
+    content.append(htmlgenerator.P(*index))
+
     entries = []
     for f in feeds:
         entries += [Entry(e, f) for e in f.entries]
     entries = reversed(sorted(entries, key=lambda e: e.date))
 
-    content = []
     previous_date = None
 
     for entry in entries:
@@ -119,7 +135,7 @@ def main():
     args = parser.parse_args()
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        feeds = executor.map(feedparser.parse, args.feed)
+        feeds = list(executor.map(feedparser.parse, args.feed))
 
     output = render(feeds)
 
