@@ -103,10 +103,11 @@ def render(feeds):
 
         index.append(
             htmlgenerator.A(
-                f.feed.title,
+                f.feed.title or "?",
                 href=f.feed.link,
             )
         )
+        index.append(f" ({len(f.entries)})")
 
     content.append(htmlgenerator.P(*index))
 
