@@ -55,20 +55,18 @@ class Entry:
 
         HEADERS = ("h1", "h2", "h3", "h4", "h5", "h6")
         for fragment in html.iter():
-            try:
-                header_level = HEADERS.index(fragment.tag) + 1
-            except ValueError:
+            if fragment.tag not in HEADERS:
                 continue
+            header_level = HEADERS.index(fragment.tag) + 1
             if not min_header_level or header_level < min_header_level:
                 min_header_level = header_level
             if not max_header_level or header_level > max_header_level:
                 max_header_level = header_level
 
         for fragment in html.iter():
-            try:
-                header_level = HEADERS.index(fragment.tag) + 1
-            except ValueError:
+            if fragment.tag not in HEADERS:
                 continue
+            header_level = HEADERS.index(fragment.tag) + 1
             new_level = min(header_level - min_header_level + base_header_level, 6)
             fragment.tag = f"h{new_level}"
         return lxml.html.tostring(html).decode("utf8")
