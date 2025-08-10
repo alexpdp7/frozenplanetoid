@@ -18,18 +18,6 @@ def log(s):
     print(s, file=sys.stderr, flush=True)
 
 
-class Feed:
-    def __init__(self, url):
-        self.url = url
-
-    def load(self):
-        log(f"loading {self}")
-        self.parsed = feedparser.parse(self.url)
-
-    def __repr__(self):
-        return f"Feed({self.url})"
-
-
 class Entry:
     def __init__(self, e, feed):
         self.e = e
@@ -95,7 +83,7 @@ class Entry:
                                 self.title,
                                 href=self.link,
                             ),
-                            f" ({self.feed.parsed.feed.title})",
+                            f" ({self.feed.feed.title})",
                         ),
                         htmlgenerator.mark_safe(self.html_content(3) or ""),
                     )
@@ -107,7 +95,7 @@ class Entry:
 def render(feeds):
     entries = []
     for f in feeds:
-        entries += [Entry(e, f) for e in f.parsed.entries]
+        entries += [Entry(e, f) for e in f.entries]
     entries = reversed(sorted(entries, key=lambda e: e.date))
 
     content = []
@@ -131,13 +119,7 @@ def main():
     args = parser.parse_args()
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-
-        def _load(feed):
-            feed = Feed(feed)
-            feed.load()
-            return feed
-
-        feeds = executor.map(_load, args.feed)
+        feeds = executor.map(feedparser.parse, args.feed)
 
     output = render(feeds)
 
