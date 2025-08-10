@@ -14,10 +14,6 @@ import lxml.html
 SANITIZER = html_sanitizer.Sanitizer()
 
 
-def log(s):
-    print(s, file=sys.stderr, flush=True)
-
-
 class Entry:
     def __init__(self, e, feed):
         self.e = e
