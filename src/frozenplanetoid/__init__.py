@@ -85,7 +85,7 @@ class Entry:
         )
 
 
-def render(feeds):
+def render(title, feeds):
     content = []
 
     index = []
@@ -118,12 +118,13 @@ def render(feeds):
         content.append(entry.as_html())
         previous_date = entry_date
 
-    return html(*(content))
+    return html(title, *(content))
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=str, default="-")
+    parser.add_argument("--title", type=str, default="Frozen Planetoid")
     parser.add_argument("feed", nargs="*")
 
     args = parser.parse_args()
@@ -131,7 +132,7 @@ def main():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         feeds = list(executor.map(feedparser.parse, args.feed))
 
-    output = render(feeds)
+    output = render(args.title, feeds)
 
     if args.output == "-":
         print(output, end="")
@@ -139,12 +140,13 @@ def main():
         pathlib.Path(args.output).write_text(output)
 
 
-def html(*body):
+def html(title, *body):
     return lxml.html.tostring(
         lxml.html.fromstring(
             htmlgenerator.render(
                 htmlgenerator.HTML(
                     htmlgenerator.HEAD(
+                        htmlgenerator.TITLE(title),
                         htmlgenerator.STYLE(
                             textwrap.dedent("""
                             :root {
