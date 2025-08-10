@@ -10,3 +10,15 @@ You can use Frozen Planetoid:
 
 * ... as a low cost RSS feed reader
 * ... to promote websites that provide good RSS feeds
+
+## Usage
+
+You can use `pipx` or `uv` to run the program without installing.
+
+```
+pipx run --spec git+https://github.com/alexpdp7/frozenplanetoid.git/ frozenplanetoid --help
+```
+
+```
+uvx --with git+https://github.com/alexpdp7/frozenplanetoid.git/ frozenplanetoid --help
+```
