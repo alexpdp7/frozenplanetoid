@@ -133,7 +133,7 @@ def main():
 
         def _parse(f):
             result = feedparser.parse(f)
-            if result.bozo_exception:
+            if hasattr(result, "bozo_exception"):
                 raise Exception(f"Error parsing {f}", result.bozo_exception)
             return result
 
