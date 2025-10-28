@@ -129,8 +129,15 @@ def main():
 
     args = parser.parse_args()
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        feeds = list(executor.map(feedparser.parse, args.feed))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+
+        def _parse(f):
+            result = feedparser.parse(f)
+            if result.bozo_exception:
+                raise Exception(f"Error parsing {f}", result.bozo_exception)
+            return result
+
+        feeds = list(executor.map(_parse, args.feed))
 
     output = render(args.title, feeds)
 
