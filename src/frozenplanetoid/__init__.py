@@ -133,7 +133,9 @@ def main():
 
         def _parse(f):
             result = feedparser.parse(f)
-            if hasattr(result, "bozo_exception"):
+            if hasattr(result, "bozo_exception") and not isinstance(
+                result.bozo_exception, feedparser.exceptions.CharacterEncodingOverride
+            ):
                 raise Exception(f"Error parsing {f}", result.bozo_exception)
             return result
 
