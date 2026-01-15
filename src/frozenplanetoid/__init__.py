@@ -129,7 +129,7 @@ def main():
 
     args = parser.parse_args()
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+    with concurrent.futures.ThreadPoolExecutor() as executor:
 
         def _parse(f):
             result = feedparser.parse(f)
