@@ -41,6 +41,7 @@ class Entry:
         if len(html) != 1:
             return None
         html = SANITIZER.sanitize(html[0].value)
+        html = html.strip()
         if not html:
             return None
         html = lxml.html.fromstring(html)
